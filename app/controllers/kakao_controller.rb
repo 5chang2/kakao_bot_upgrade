@@ -29,11 +29,20 @@ class KakaoController < ApplicationController
   end
 
   def friend_add
+    User.create(user_key: params[:user_key], chat_room: 0)
+    render nothing: true
   end
   
   def friend_delete
+    user = User.find_by(user_key: params[:user_key])
+    user.destroy
+    render nothing: true
   end
 
   def chat_room
+    user = User.find_by(user_key: params[:user_key])
+    user.plus
+    user.save
+    render nothing: true
   end
 end
