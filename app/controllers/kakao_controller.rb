@@ -1,4 +1,5 @@
 class KakaoController < ApplicationController
+  
   def keyboard
     render json: {
       "type": "text"
@@ -45,4 +46,8 @@ class KakaoController < ApplicationController
     user.save
     render nothing: true
   end
+  
+  
+  
+  
 end
