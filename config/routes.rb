@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  get 'kakao/keyboard'
+
+  get 'kakao/message'
+
+  get 'kakao/friend'
+
+  get 'kakao/chat_room'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
