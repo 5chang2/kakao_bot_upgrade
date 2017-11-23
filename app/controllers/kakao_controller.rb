@@ -1,32 +1,48 @@
+require 'objectmaker'
+require 'parser'
+
 class KakaoController < ApplicationController
+  @@key = ObjectMaker::Keyboard.new
+  @@msg = ObjectMaker::Message.new
+  
   
   def keyboard
-    render json: {
-      "type": "text"
-    }
+    render json: {"type": "text"}
   end
 
   def message
-    @user_msg = params[:content] # 사용자가 보낸 내용은 content에 담아서 전송됩니다.
-    @msg = @user_msg
+
+    user_msg = params[:content] 
     
-    # 메세지를 넣어봅시다.
-    @message = {
-      text: @msg
-    }
+    pic = false
+
+    case user_msg
+      when "영화"
+        movie = Parser::Movie.new
+        msg = movie.naver + [" 강추!!", " 나도 안봤지만 추천", " 보던가말던가"].sample
+      when "고양이"
+        pic = true
+        animal = Parser::Animal.new
+        msg = "나만고양이없어"
+      when "야"
+        msg = "호"
+      else
+        msg = "야옹"
+    end
     
-    # 키보드를 만들어 주겠습니다.
-    @basic_keyboard = {
-      :type => "text"					
-    }
     
-    # 응답
-    @result = {
-      message: @message,
-      keyboard: @basic_keyboard
-    }
- 
-    render json: @result
+    if pic
+      result = {
+        message: @@msg.getPicMessage(msg.to_s, animal.cat),
+        keyboard: @@key.getBtnKey(["영화","고양이","??"])
+      }
+    else
+      result = {
+        message: @@msg.getMessage(msg.to_s),
+        keyboard: @@key.getBtnKey(["영화","고양이","??"])
+      }
+    end
+    render json: result
   end
 
   def friend_add
@@ -46,8 +62,5 @@ class KakaoController < ApplicationController
     user.save
     render nothing: true
   end
-  
-  
-  
   
 end
